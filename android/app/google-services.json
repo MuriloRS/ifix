@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "840726426138",
+    "firebase_url": "https://ifix-22d5d.firebaseio.com",
+    "project_id": "ifix-22d5d",
+    "storage_bucket": "ifix-22d5d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:840726426138:android:5ed3eaf4060497891097a3",
+        "android_client_info": {
+          "package_name": "com.ifix.developer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "840726426138-ge4dd0453i20bt2kd11kvsltvkbrtspr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ifix.developer",
+            "certificate_hash": "c2873e5a0f157925a9bd56877b15193ce456b0dc"
+          }
+        },
+        {
+          "client_id": "840726426138-bkb6cv8mdm3fjqap5uumrrgsfho49ka1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA_5pmNxe7E-ohU5wtDOY6VNe6GxPi84Zw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "840726426138-bkb6cv8mdm3fjqap5uumrrgsfho49ka1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
