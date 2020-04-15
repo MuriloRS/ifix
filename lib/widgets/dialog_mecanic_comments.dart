@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:ifix/widgets/loader.dart';
+import 'package:outline_material_icons/outline_material_icons.dart';
 
 class DialogMecanicComments extends StatelessWidget {
   String mecanicID;
@@ -19,24 +20,31 @@ class DialogMecanicComments extends StatelessWidget {
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.connectionState.index == ConnectionState.none.index ||
               snapshot.connectionState.index == ConnectionState.waiting.index) {
-            return CupertinoAlertDialog(
-              content: Loader(),
+            return AlertDialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: new BorderRadius.circular(10.0),
+              ),
+              content: Container(height: 50, child: Loader()),
             );
           }
 
-          return CupertinoAlertDialog(
-            actions: <Widget>[
-              CupertinoDialogAction(
-                child: Text("Fechar"),
-                isDefaultAction: true,
-                isDestructiveAction: false,
-                textStyle: TextStyle(color: Colors.blueAccent[600]),
-                onPressed: () => Navigator.of(context).pop(),
-              )
-            ],
-            title: Text(
-              'Comentários',
-              textAlign: TextAlign.center,
+          return AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: new BorderRadius.circular(10.0),
+            ),
+            contentPadding: EdgeInsets.all(5),
+            titlePadding: EdgeInsets.only(top: 5, bottom: 0, left: 10, right:0),
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text(
+                  'Comentários',
+                  textAlign: TextAlign.center,
+                ),
+                IconButton(
+                    icon: Icon(OMIcons.close),
+                    onPressed: () => Navigator.pop(context)),
+              ],
             ),
             content: Container(
               padding: EdgeInsets.only(top: 10),

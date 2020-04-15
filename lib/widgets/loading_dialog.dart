@@ -7,9 +7,13 @@ class LoadingDialog {
     showCupertinoDialog(
       context: context,
       builder: (BuildContext context) {
-        return CupertinoAlertDialog(
-          title: Text(text),
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: new BorderRadius.circular(10.0),
+          ),
+          title: text != null ? Text(text) : null,
           content: Container(
+              height: 50,
               padding: EdgeInsets.only(top: 10),
               child: Center(child: Loader())),
         );

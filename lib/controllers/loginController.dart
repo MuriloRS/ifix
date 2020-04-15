@@ -74,7 +74,7 @@ abstract class _LoginControllerBase with Store {
           'max_distance': 30,
           'notifications': false,
           'localization': null,
-          'configs': {'rating':0.0, 'max_distance': 30, 'notifications':true}
+          'configs': {'rating':0.0, 'max_distance': 50, 'notifications':true}
         };
 
         await Firestore.instance
