@@ -32,7 +32,7 @@ class DialogMecanicComments extends StatelessWidget {
             shape: RoundedRectangleBorder(
               borderRadius: new BorderRadius.circular(10.0),
             ),
-            contentPadding: EdgeInsets.all(5),
+            contentPadding: EdgeInsets.only(right:10, bottom: 10, top:0, left:10),
             titlePadding: EdgeInsets.only(top: 5, bottom: 0, left: 10, right:0),
             title: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -43,6 +43,7 @@ class DialogMecanicComments extends StatelessWidget {
                 ),
                 IconButton(
                     icon: Icon(OMIcons.close),
+                    highlightColor: Colors.transparent,
                     onPressed: () => Navigator.pop(context)),
               ],
             ),

@@ -4,6 +4,7 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:ifix/controllers/callController.dart';
 import 'package:ifix/libs/style.dart';
+import 'package:ifix/views/home.dart';
 import 'package:outline_material_icons/outline_material_icons.dart';
 
 class FinishedServiceScreen extends StatelessWidget {
@@ -15,7 +16,7 @@ class FinishedServiceScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final descriptionController = TextEditingController();
     final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
-    double rating;
+    double rating = 0.0;
 
     return Container(
       padding: EdgeInsets.all(20),
@@ -29,8 +30,8 @@ class FinishedServiceScreen extends StatelessWidget {
             height: 20,
           ),
           RatingBar(
-            initialRating: 3,
-            minRating: 1,
+            initialRating: 0,
+            minRating: 0,
             direction: Axis.horizontal,
             allowHalfRating: true,
             itemCount: 5,
@@ -85,7 +86,7 @@ class FinishedServiceScreen extends StatelessWidget {
                     ),
                     Icon(
                       OMIcons.send,
-                      color: Colors.red,
+                      color: Theme.of(context).primaryColor,
                       size: 20,
                     )
                   ],

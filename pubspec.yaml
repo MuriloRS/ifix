@@ -37,6 +37,7 @@ dependencies:
   provider: 4.0.4
   autocomplete_textfield: 1.7.3
   flutter_rating_bar: 3.0.1+1
+  flutter_native_splash: 0.1.9
 
 dev_dependencies:
   flutter_test:
@@ -49,15 +50,12 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - lib/libs/municipios.json
+    - assets/municipios.json
     - assets/success_icon.png
     - assets/big_logo.png
-    - assets/short_logo1.png
-    - assets/short_logo2.png
-    - assets/short_logo3.png
+    - assets/flag.png
     - assets/playstore.png
     - assets/app-store.png
-  #  - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

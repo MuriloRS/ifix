@@ -5,7 +5,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:ifix/controllers/callController.dart';
 import 'package:ifix/libs/style.dart';
 import 'package:ifix/widgets/dialog_mecanic_comments.dart';
-import 'package:ifix/widgets/loading_dialog.dart';
+import 'package:ifix/libs/dialogs.dart';
 import 'package:outline_material_icons/outline_material_icons.dart';
 
 class MecanicFoundedScreen extends StatelessWidget {
@@ -29,7 +29,7 @@ class MecanicFoundedScreen extends StatelessWidget {
                 style: TextStyle(
                     fontSize: 26,
                     fontWeight: FontWeight.w500,
-                    color: Colors.green[600])),
+                    color: Colors.green[700])),
             SizedBox(
               height: 35,
             ),
@@ -65,7 +65,7 @@ class MecanicFoundedScreen extends StatelessWidget {
                 ),
                 IconButton(
                     color: Colors.blueAccent[700],
-                    icon: Icon(OMIcons.comment, color: Colors.blueAccent[700]),
+                    icon: Icon(OMIcons.comment, color: Colors.black),
                     iconSize: 18,
                     onPressed: () {
                       showCupertinoDialog(
@@ -111,8 +111,13 @@ class MecanicFoundedScreen extends StatelessWidget {
                 child: RaisedButton(
                   onPressed: () async {
                     if (_fbKey.currentState.validate()) {
-                      new LoadingDialog().dialogSearchingMecanic(
-                          context, 'Aguardando o mecânico aceitar...');
+                      new Dialogs().dialogSearchingMecanic(
+                          context, 'Aguardando o mecânico aceitar...',
+                          () async {
+                        await controller.refuseCall(mecanic['id']);
+                        Navigator.of(context).pop();
+                      });
+
                       await controller.acceptCall(
                           mecanic['id'], descriptionController.text);
                     }
@@ -126,7 +131,7 @@ class MecanicFoundedScreen extends StatelessWidget {
                       style: TextStyle(color: Colors.white, fontSize: 18)),
                 )),
             SizedBox(
-              height: 20,
+              height: 10,
             ),
             Container(
                 width: double.infinity,

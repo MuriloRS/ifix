@@ -52,7 +52,7 @@ abstract class _LoginControllerBase with Store {
   }
 
   @action
-  Future<void> doRegister(UserModel model, String city) async {
+  Future<void> doRegister(UserModel model) async {
     stateLoading = ControllerState.loading;
 
     try {

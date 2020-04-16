@@ -1,9 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:ifix/controllers/callController.dart';
-import 'package:ifix/libs/style.dart';
 import 'package:ifix/models/userModel.dart';
 import 'package:ifix/views/home.dart';
 import 'package:ifix/widgets/finished_service_screen.dart';
@@ -30,7 +27,6 @@ class _SearchMecanicState extends State<SearchMecanic> {
 
     autorun((_) {
       if (controller.stateLoading == ControllerState.done_call) {
-        userProvider.finishedCall = true;
         Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (c) => Home()));
       }
@@ -46,11 +42,13 @@ class _SearchMecanicState extends State<SearchMecanic> {
                         .snapshots(),
                     builder:
                         (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-                      if (snapshot.data['call'] != null &&
-                          (snapshot.connectionState.index ==
+                      if (snapshot.data == null) {
+                        return Loader();
+                      } else if (snapshot.data['call'] != null &&
+                              (snapshot.connectionState.index ==
                                   ConnectionState.done.index ||
-                              snapshot.connectionState.index ==
-                                  ConnectionState.active.index)) {
+                          snapshot.connectionState.index ==
+                              ConnectionState.active.index)) {
                         if (snapshot.data['call']['state'] == 'IN_PROGRESS') {
                           Navigator.of(context).pop();
 

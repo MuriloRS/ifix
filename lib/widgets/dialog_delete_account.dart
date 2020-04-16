@@ -18,13 +18,14 @@ class _DialogDeleteAccoutnState extends State<DialogDeleteAccount> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+        contentPadding: EdgeInsets.only(bottom:10, right: 20, left:20, top:20),
         shape: RoundedRectangleBorder(
           borderRadius: new BorderRadius.circular(10.0),
         ),
         content: loading
             ? Loader()
             : Column(
-              mainAxisSize: MainAxisSize.min,
+                mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   Container(
                     child: Text(
@@ -32,7 +33,7 @@ class _DialogDeleteAccoutnState extends State<DialogDeleteAccount> {
                         style: TextStyle(fontSize: 20)),
                   ),
                   SizedBox(
-                    height: 20,
+                    height: 25,
                   ),
                   Container(
                     width: double.infinity,
@@ -52,6 +53,9 @@ class _DialogDeleteAccoutnState extends State<DialogDeleteAccount> {
                           Navigator.pushReplacement(context,
                               MaterialPageRoute(builder: (context) => Login()));
                         },
+                        shape: RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10))),
                         child: Text("Sim",
                             style:
                                 TextStyle(fontSize: 15, color: Colors.white))),
@@ -61,7 +65,8 @@ class _DialogDeleteAccoutnState extends State<DialogDeleteAccount> {
                     child: FlatButton(
                         onPressed: () => Navigator.pop(context),
                         child: Text("Não",
-                            style: TextStyle(fontSize: 15, color: Colors.red))),
+                            style: TextStyle(
+                                fontSize: 15, color: Colors.red[700]))),
                   )
                 ],
               ));

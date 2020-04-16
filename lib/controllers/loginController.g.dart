@@ -156,8 +156,8 @@ mixin _$LoginController on _LoginControllerBase, Store {
   final _$doRegisterAsyncAction = AsyncAction('doRegister');
 
   @override
-  Future<void> doRegister(UserModel model, String city) {
-    return _$doRegisterAsyncAction.run(() => super.doRegister(model, city));
+  Future<void> doRegister(UserModel model) {
+    return _$doRegisterAsyncAction.run(() => super.doRegister(model));
   }
 
   final _$verifyConfirmationEmailAsyncAction =

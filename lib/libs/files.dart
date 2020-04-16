@@ -7,7 +7,7 @@ class Files {
 
     try {
       String result = await DefaultAssetBundle.of(context)
-          .loadString('lib/libs/municipios.json');
+          .loadString('assets/municipios.json');
 
       final parsed =
           json.decode(result.toString()).cast<Map<String, dynamic>>();

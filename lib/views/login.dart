@@ -19,8 +19,7 @@ class Login extends StatelessWidget {
   Widget build(BuildContext context) {
     final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
     var phoneController = new MaskedTextController(mask: '(00) 00000-0000');
-    final cityController = new TextEditingController();
-    final autocompleteKey = new GlobalKey<AutoCompleteTextFieldState<String>>();
+    
 
     final controller = new LoginController();
     final _scaffoldKey = new GlobalKey<ScaffoldState>();
@@ -134,32 +133,7 @@ class Login extends StatelessWidget {
                                     keyboardType: TextInputType.number,
                                     decoration: Style.textFieldDecoration(
                                         Icon(OMIcons.phone))),
-                                SizedBox(
-                                  height: 15,
-                                ),
-                                Text("Cidade",
-                                    textAlign: TextAlign.start,
-                                    style: Style.labelFieldStyle()),
-                                FutureBuilder(
-                                    future: new Files().getCities(context),
-                                    builder: (context,
-                                        AsyncSnapshot<List<String>> cities) {
-                                      if (cities.connectionState.index ==
-                                              ConnectionState.none.index ||
-                                          cities.connectionState.index ==
-                                              ConnectionState.waiting.index) {
-                                        return Loader();
-                                      } else {
-                                        return SimpleAutoCompleteTextField(
-                                          clearOnSubmit: false,
-                                          controller: cityController,
-                                          suggestions: cities.data,
-                                          key: autocompleteKey,                                          
-                                          decoration: Style.textFieldDecoration(
-                                              Icon(OMIcons.map)),
-                                        );
-                                      }
-                                    }),
+                                
                                 SizedBox(
                                   height: 15,
                                 ),
@@ -194,7 +168,7 @@ class Login extends StatelessWidget {
                                                     if (_fbKey.currentState
                                                         .validate()) {
                                                       controller.doRegister(
-                                                          userProvider, cityController.text);
+                                                          userProvider);
                                                     }
                                                   },
                                                   color: Theme.of(context)
@@ -202,7 +176,7 @@ class Login extends StatelessWidget {
                                                   padding: EdgeInsets.symmetric(
                                                       horizontal: 10,
                                                       vertical: 10),
-                                                  elevation: 5,
+                                                  elevation: 2,
                                                   shape: RoundedRectangleBorder(
                                                       borderRadius:
                                                           BorderRadius.all(

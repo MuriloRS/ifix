@@ -46,7 +46,9 @@ abstract class _CallControllerBase with Store {
     stateLoading = ControllerState.loading;
     Map newUserdata = snapshot.data;
 
-    newUserdata['rating'] = (newUserdata['rating'] + rating) / 2;
+    if (rating > 0.0) {
+      newUserdata['rating'] = (newUserdata['rating'] + rating) / 2;
+    }
 
     newUserdata['call'] = null;
 
