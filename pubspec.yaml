@@ -38,10 +38,14 @@ dependencies:
   autocomplete_textfield: 1.7.3
   flutter_rating_bar: 3.0.1+1
   flutter_native_splash: 0.1.9
-
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+flutter_native_splash:
+  image: assets/big_logo.png
+  color: "FFFFFF"
 
 
 flutter:

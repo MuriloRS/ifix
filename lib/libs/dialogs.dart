@@ -1,7 +1,6 @@
 import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:ifix/controllers/homeController.dart';
 import 'package:ifix/libs/files.dart';
 import 'package:ifix/libs/style.dart';
 import 'package:ifix/widgets/loader.dart';

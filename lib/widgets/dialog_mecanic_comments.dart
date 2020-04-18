@@ -6,7 +6,7 @@ import 'package:ifix/widgets/loader.dart';
 import 'package:outline_material_icons/outline_material_icons.dart';
 
 class DialogMecanicComments extends StatelessWidget {
-  String mecanicID;
+  final String mecanicID;
   DialogMecanicComments(this.mecanicID);
 
   @override

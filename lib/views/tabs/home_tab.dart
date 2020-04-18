@@ -50,7 +50,7 @@ class HomeTab extends StatelessWidget {
             Navigator.of(context).pop();
 
             controller.getMostNearMecanic(_mecanics.documents);
-          });
+          }); 
 
           break;
         default:

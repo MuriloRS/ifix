@@ -1,10 +1,8 @@
-import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:ifix/controllers/loginController.dart';
-import 'package:ifix/libs/files.dart';
 import 'package:ifix/libs/style.dart';
 import 'package:ifix/models/userModel.dart';
 import 'package:ifix/views/email_confirm.dart';
@@ -41,13 +39,14 @@ class Login extends StatelessWidget {
             context, MaterialPageRoute(builder: (c) => EmailConfirm()));
       }
     });
+    
 
     return FutureBuilder(
       future: controller.getUserData(),
       builder: (context, AsyncSnapshot<Map<dynamic, dynamic>> snapshot) {
         if (snapshot.connectionState.index == ConnectionState.none.index ||
             snapshot.connectionState.index == ConnectionState.waiting.index) {
-          return Material(color: Colors.white, child: Loader());
+          return Container(color: Colors.white, child: Loader());
         } else {
           if (snapshot.data != null) {
             userProvider.user = snapshot.data['user'];
