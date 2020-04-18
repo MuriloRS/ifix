@@ -8,12 +8,11 @@ class MenuDrawer extends StatelessWidget {
   MenuDrawer(this.pageController);
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-        child: Drawer(
-            child: Column(children: <Widget>[
+    return Drawer(
+        child: Column(children: <Widget>[
       SizedBox(height: 35),
       Container(
-        padding: EdgeInsets.only(left: 25),
+        padding: EdgeInsets.only(top: 20, left: 25),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
@@ -52,6 +51,6 @@ class MenuDrawer extends StatelessWidget {
           ],
         ),
       ),
-    ])));
+    ]));
   }
 }

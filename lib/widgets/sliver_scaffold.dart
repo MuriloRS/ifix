@@ -30,7 +30,7 @@ class SliverScaffold extends StatelessWidget {
         forceElevated: true,
         backgroundColor: Colors.white,
         iconTheme:
-            new IconThemeData(color: Colors.black, size: 22),
+            new IconThemeData(color: Colors.black, size: 26),
         snap: true,
       ),
       SliverToBoxAdapter(child: content)

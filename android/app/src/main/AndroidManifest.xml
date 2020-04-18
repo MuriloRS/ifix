@@ -7,8 +7,8 @@
          FlutterApplication and put your custom class here. -->
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="ifix"
-        android:icon="@mipmap/ic_launcher">
+        android:label="iFix"
+        android:icon="@drawable/ic_launcher">
 
         <meta-data android:name="com.google.android.maps.v2.API_KEY"  
         android:value="AIzaSyDDokdI8Bx239pPAoFcqPjdPyOe2-lArsw" />

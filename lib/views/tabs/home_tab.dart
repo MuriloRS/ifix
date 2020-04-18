@@ -45,22 +45,19 @@ class HomeTab extends StatelessWidget {
 
           break;
         case ControllerState.city_empty:
-          new Dialogs().dialogUserCity(context, (String city) async{
+          new Dialogs().dialogUserCity(context, (String city) async {
             controller.updateCity(city);
             Navigator.of(context).pop();
 
             controller.getMostNearMecanic(_mecanics.documents);
-          }); 
+          });
 
           break;
         default:
       }
     });
 
-    
-
-    return SafeArea(
-        child: Stack(
+    return Stack(
       children: <Widget>[
         FutureBuilder(
           future: Future.wait([
@@ -84,6 +81,7 @@ class HomeTab extends StatelessWidget {
             _mecanics = snapshot.data.elementAt(0);
 
             return GoogleMap(
+              myLocationButtonEnabled: false,
               mapType: MapType.normal,
               initialCameraPosition: _kGooglePlex,
               myLocationEnabled: true,
@@ -94,17 +92,33 @@ class HomeTab extends StatelessWidget {
         ),
         Positioned(
             left: 15,
-            top: 15,
-            child: IconButton(
-                color: Colors.black,
-                icon: Icon(
-                  OMIcons.menu,
-                  size: 34,
-                  color: Colors.black,
-                ),
-                onPressed: Scaffold.of(context).openDrawer)),
+            top: 35,
+            child: Container(
+                padding: EdgeInsets.all(0),
+                decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey,
+                        blurRadius: 2,
+                        offset: Offset(
+                          1.0, // horizontal, move right 10
+                          2.0, // vertical, move down 10
+                        ),
+                      )
+                    ],
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(Radius.circular(30))),
+                child: IconButton(
+                    padding: EdgeInsets.all(0),
+                    color: Colors.black,
+                    icon: Icon(
+                      OMIcons.menu,
+                      size: 28,
+                      color: Colors.black,
+                    ),
+                    onPressed: Scaffold.of(context).openDrawer))),
         Positioned.fill(
-          top: 70,
+          top: 100,
           child: Align(
             alignment: Alignment.topCenter,
             child: RaisedButton(
@@ -136,12 +150,12 @@ class HomeTab extends StatelessWidget {
           ),
         ),
         Positioned.fill(
-            top: 120,
+            top: 150,
             child: Align(
               alignment: Alignment.topCenter,
               child: Text("Ou procure pelo mapa"),
             ))
       ],
-    ));
+    );
   }
 }
