@@ -7,9 +7,20 @@ part "loginController.g.dart";
 
 class LoginController = _LoginControllerBase with _$LoginController;
 
-enum ControllerState { initial, loading, done, error }
+enum ControllerState {
+  initial,
+  loading,
+  done,
+  error,
+  loadingLogin,
+  loadingPassword,
+  successRecoverPassword
+}
 
 abstract class _LoginControllerBase with Store {
+  UserModel userModel;
+  _LoginControllerBase(this.userModel);
+
   @observable
   String name;
   @action
@@ -74,7 +85,7 @@ abstract class _LoginControllerBase with Store {
           'max_distance': 30,
           'notifications': false,
           'localization': null,
-          'configs': {'rating':0.0, 'max_distance': 50, 'notifications':true}
+          'configs': {'rating': 0.0, 'max_distance': 50, 'notifications': true}
         };
 
         await Firestore.instance
@@ -102,7 +113,8 @@ abstract class _LoginControllerBase with Store {
   @action
   Future<void> verifyConfirmationEmail() async {
     FirebaseAuth auth = FirebaseAuth.instance;
-    FirebaseUser currentUser = await auth.currentUser()..reload();
+    FirebaseUser currentUser = await auth.currentUser()
+      ..reload();
 
     if (currentUser.isEmailVerified) {
       isEmailVerified = true;
@@ -124,5 +136,51 @@ abstract class _LoginControllerBase with Store {
         .get();
 
     return {'userData': snapshot.data, 'user': currentUser};
+  }
+
+  @action
+  Future<void> signIn(email, password) async {
+    try {
+      stateLoading = ControllerState.loadingLogin;
+
+      await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email, password: password);
+
+      FirebaseUser user = await FirebaseAuth.instance.currentUser();
+
+      DocumentSnapshot userData =
+          await Firestore.instance.collection('users').document(user.uid).get();
+
+      userModel.userData = userData.data;
+      userModel.user = user;
+
+      stateLoading = ControllerState.done;
+    } catch (e) {
+      if(e.code=='ERROR_USER_NOT_FOUND'){
+        errorMessage = "Esse email não está cadastrado na nossa base de dados, tente outro.";
+      }else if(e.code == 'ERROR_WRONG_PASSWORD'){
+        errorMessage = "Senha inválida";
+      }
+      stateLoading = ControllerState.error;
+    }
+  }
+
+  @action
+  Future<void> recoverPassword(email) async {
+    try {
+      stateLoading = ControllerState.loadingPassword;
+
+      await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+
+      stateLoading = ControllerState.successRecoverPassword;
+    } catch (e) {
+      if (e.code == 'ERROR_USER_NOT_FOUND') {
+        errorMessage = 'Usuário não encontrado com esse email, tente outro.';
+      }
+      else{
+        errorMessage = 'Email inválido';
+      }
+      stateLoading = ControllerState.error;
+    }
   }
 }

@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:ifix/controllers/loginController.dart';
+import 'package:ifix/models/userModel.dart';
 import 'package:ifix/views/home.dart';
 import 'package:mobx/mobx.dart';
+import 'package:provider/provider.dart';
 
 class EmailConfirm extends StatelessWidget {
+  EmailConfirm();
+
   @override
   Widget build(BuildContext context) {
+    final userProvider = Provider.of<UserModel>(context);
+
     final GlobalKey<ScaffoldState> _fbKey = GlobalKey<ScaffoldState>();
-    final controller = new LoginController();
+    final controller = new LoginController(userProvider);
 
     autorun((_) {
       if (controller.isEmailVerified) {
@@ -18,7 +24,7 @@ class EmailConfirm extends StatelessWidget {
             backgroundColor: Colors.black,
             content: Text(
                 "Você ainda não validou o seu email, verifique sua caixa de spam.",
-                style: TextStyle(color: Colors.white  ))));
+                style: TextStyle(color: Colors.white))));
       }
     });
 

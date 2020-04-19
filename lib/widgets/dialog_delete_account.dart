@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ifix/controllers/accountController.dart';
-import 'package:ifix/views/login.dart';
+import 'package:ifix/views/signup.dart';
 import 'package:ifix/widgets/loader.dart';
 
 class DialogDeleteAccount extends StatefulWidget {
@@ -51,7 +51,7 @@ class _DialogDeleteAccoutnState extends State<DialogDeleteAccount> {
                           });
 
                           Navigator.pushReplacement(context,
-                              MaterialPageRoute(builder: (context) => Login()));
+                              MaterialPageRoute(builder: (context) => Signup()));
                         },
                         shape: RoundedRectangleBorder(
                             borderRadius:

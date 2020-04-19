@@ -3,6 +3,7 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:ifix/controllers/loginController.dart';
+import 'package:ifix/libs/dialogs.dart';
 import 'package:ifix/libs/style.dart';
 import 'package:ifix/models/userModel.dart';
 import 'package:ifix/views/email_confirm.dart';
@@ -12,16 +13,15 @@ import 'package:mobx/mobx.dart';
 import 'package:outline_material_icons/outline_material_icons.dart';
 import 'package:provider/provider.dart';
 
-class Login extends StatelessWidget {
+class Signup extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
     var phoneController = new MaskedTextController(mask: '(00) 00000-0000');
-    
 
-    final controller = new LoginController();
     final _scaffoldKey = new GlobalKey<ScaffoldState>();
     final userProvider = Provider.of<UserModel>(context);
+    final controller = new LoginController(userProvider);
 
     autorun((_) {
       if (controller.stateLoading == ControllerState.error) {
@@ -32,14 +32,25 @@ class Login extends StatelessWidget {
           ),
           backgroundColor: Colors.red,
         ));
+      } else if(controller.stateLoading == ControllerState.successRecoverPassword){
+        _scaffoldKey.currentState.showSnackBar(SnackBar(
+          content: Text(
+            "Te enviamos um email para você recuperar sua senha.",
+            textAlign: TextAlign.center,
+          ),
+          backgroundColor: Colors.green,
+        ));
       }
-
-      if (controller.stateLoading == ControllerState.done) {
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (c) => EmailConfirm()));
+      else if (controller.stateLoading == ControllerState.done) {
+        if (userProvider.user.isEmailVerified) {
+          Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (c) => Material(child: Home())));
+        } else {
+          Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (c) => EmailConfirm()));
+        }
       }
     });
-    
 
     return FutureBuilder(
       future: controller.getUserData(),
@@ -55,14 +66,14 @@ class Login extends StatelessWidget {
             return Home();
           }
 
-          return SafeArea(
-              child: Scaffold(
+          return Scaffold(
             key: _scaffoldKey,
             resizeToAvoidBottomPadding: true,
             resizeToAvoidBottomInset: true,
             body: SingleChildScrollView(
                 child: Container(
-                    padding: EdgeInsets.all(20),
+                    padding: EdgeInsets.only(
+                        right: 20, bottom: 20, left: 20, top: 40),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
@@ -94,7 +105,7 @@ class Login extends StatelessWidget {
                                       FormBuilderValidators.required(
                                           errorText: "O nome é obrigatório")
                                     ],
-                                    keyboardType: TextInputType.emailAddress,
+                                    keyboardType: TextInputType.text,
                                     decoration: Style.textFieldDecoration(
                                         Icon(OMIcons.person))),
                                 SizedBox(
@@ -132,7 +143,6 @@ class Login extends StatelessWidget {
                                     keyboardType: TextInputType.number,
                                     decoration: Style.textFieldDecoration(
                                         Icon(OMIcons.phone))),
-                                
                                 SizedBox(
                                   height: 15,
                                 ),
@@ -200,12 +210,28 @@ class Login extends StatelessWidget {
                                                       )
                                                     ],
                                                   ));
-                                        }))
+                                        })),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Container(
+                                    width: double.infinity,
+                                    child: FlatButton(
+                                      onPressed: () => new Dialogs()
+                                          .dialogLogin(context, controller),
+                                      child: Text("Já tenho conta",
+                                          style: TextStyle(
+                                              color: Colors.grey[800],
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w500,
+                                              decoration:
+                                                  TextDecoration.underline)),
+                                    ))
                               ]),
                         )
                       ],
                     ))),
-          ));
+          );
         }
       },
     );

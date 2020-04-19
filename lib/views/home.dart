@@ -11,6 +11,7 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return PageView(
       controller: _pageController,
       physics: NeverScrollableScrollPhysics(),
