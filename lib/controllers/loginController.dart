@@ -12,6 +12,7 @@ enum ControllerState {
   loading,
   done,
   error,
+  errorLogin,
   loadingLogin,
   loadingPassword,
   successRecoverPassword
@@ -161,7 +162,7 @@ abstract class _LoginControllerBase with Store {
       }else if(e.code == 'ERROR_WRONG_PASSWORD'){
         errorMessage = "Senha inválida";
       }
-      stateLoading = ControllerState.error;
+      stateLoading = ControllerState.errorLogin;
     }
   }
 
@@ -180,7 +181,7 @@ abstract class _LoginControllerBase with Store {
       else{
         errorMessage = 'Email inválido';
       }
-      stateLoading = ControllerState.error;
+      stateLoading = ControllerState.errorLogin;
     }
   }
 }

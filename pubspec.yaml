@@ -38,7 +38,8 @@ dependencies:
   autocomplete_textfield: 1.7.3
   flutter_rating_bar: 3.0.1+1
   flutter_native_splash: 0.1.9
-  
+  toast: 0.1.5
+    
 dev_dependencies:
   flutter_test:
     sdk: flutter

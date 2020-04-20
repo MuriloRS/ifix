@@ -12,6 +12,7 @@ import 'package:ifix/widgets/loader.dart';
 import 'package:mobx/mobx.dart';
 import 'package:outline_material_icons/outline_material_icons.dart';
 import 'package:provider/provider.dart';
+import 'package:toast/toast.dart';
 
 class Signup extends StatelessWidget {
   @override
