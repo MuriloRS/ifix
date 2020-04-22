@@ -33,7 +33,8 @@ class Signup extends StatelessWidget {
           ),
           backgroundColor: Colors.red,
         ));
-      } else if(controller.stateLoading == ControllerState.successRecoverPassword){
+      } else if (controller.stateLoading ==
+          ControllerState.successRecoverPassword) {
         _scaffoldKey.currentState.showSnackBar(SnackBar(
           content: Text(
             "Te enviamos um email para você recuperar sua senha.",
@@ -41,8 +42,7 @@ class Signup extends StatelessWidget {
           ),
           backgroundColor: Colors.green,
         ));
-      }
-      else if (controller.stateLoading == ControllerState.done) {
+      } else if (controller.stateLoading == ControllerState.done) {
         if (userProvider.user.isEmailVerified) {
           Navigator.pushReplacement(context,
               MaterialPageRoute(builder: (c) => Material(child: Home())));
@@ -74,16 +74,13 @@ class Signup extends StatelessWidget {
             body: SingleChildScrollView(
                 child: Container(
                     padding: EdgeInsets.only(
-                        right: 20, bottom: 20, left: 20, top: 40),
+                        right: 20, bottom: 20, left: 20, top: 20),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         Image.asset(
                           'assets/big_logo.png',
-                          height: 60,
-                        ),
-                        SizedBox(
-                          height: 20,
+                          height: 130,
                         ),
                         Text("Faça o seu cadastro",
                             style: TextStyle(fontSize: 20)),
