@@ -6,8 +6,7 @@ import 'package:ifix/models/userModel.dart';
 class Localization {
   Future<Map<String, double>> getInitialLocation(UserModel model) async {
     try {
-      Position position = await Geolocator()
-          .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+      Position position = await getCurrentPosition();
 
       await Firestore.instance
           .collection('users')
@@ -30,5 +29,10 @@ class Localization {
 
       return null;
     }
+  }
+
+  Future<Position> getCurrentPosition() async {
+    return await Geolocator()
+        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
   }
 }

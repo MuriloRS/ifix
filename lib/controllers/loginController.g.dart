@@ -169,6 +169,20 @@ mixin _$LoginController on _LoginControllerBase, Store {
         .run(() => super.verifyConfirmationEmail());
   }
 
+  final _$signInAsyncAction = AsyncAction('signIn');
+
+  @override
+  Future<void> signIn(dynamic email, dynamic password) {
+    return _$signInAsyncAction.run(() => super.signIn(email, password));
+  }
+
+  final _$recoverPasswordAsyncAction = AsyncAction('recoverPassword');
+
+  @override
+  Future<void> recoverPassword(dynamic email) {
+    return _$recoverPasswordAsyncAction.run(() => super.recoverPassword(email));
+  }
+
   final _$_LoginControllerBaseActionController =
       ActionController(name: '_LoginControllerBase');
 

@@ -7,26 +7,21 @@ class BeMecanic extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
         child: SliverScaffold(
-      title: "Seja um Mecânico",
+      title: "Cadastre sua Oficina",
       content: Container(
-        padding: EdgeInsets.only(right: 20, left: 20, bottom: 20),
+        padding: EdgeInsets.only(right: 20, left: 20, bottom: 20, top: 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Card(
-                color: Theme.of(context).primaryColor,
-                child: Container(
-                  padding: EdgeInsets.all(20),
-                  child: Text(
-                      "Cadastre-se como um mecânico ou oficina e aumente seu faturamento",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.grey[100],
-                          fontWeight: FontWeight.w400)),
-                )),
+            Text(
+                "Cadastre-se como um mecânico ou oficina e receba mais clientes",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontSize: 18,
+                    color: Colors.grey[600],
+                    fontWeight: FontWeight.w400)),
             SizedBox(
-              height: 25,
+              height: 35,
             ),
             Text("Como funciona?",
                 textAlign: TextAlign.left,

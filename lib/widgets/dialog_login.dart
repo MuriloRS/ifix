@@ -6,7 +6,6 @@ import 'package:ifix/libs/dialogs.dart';
 import 'package:ifix/libs/style.dart';
 import 'package:ifix/widgets/loader.dart';
 import 'package:outline_material_icons/outline_material_icons.dart';
-import 'package:toast/toast.dart';
 
 class DialogLogin extends StatelessWidget {
   final LoginController controller;

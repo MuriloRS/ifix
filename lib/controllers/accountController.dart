@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:ifix/models/userModel.dart';
 import 'package:ifix/widgets/dialog_delete_account.dart';
 import 'package:mobx/mobx.dart';
@@ -47,12 +48,11 @@ abstract class _AccountControllerBase with Store {
         .updateData(newData);
 
     loadingState = ControllerState.done;
-  } 
+  }
 
   Future<void> deleteAccountData() async {
-
-    await FirebaseAuth.instance
-          .signInWithEmailAndPassword(email: model.user.email, password: '1364738p');
+    await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: model.user.email, password: '1364738p');
 
     await Firestore.instance
         .collection('users')
@@ -84,4 +84,5 @@ abstract class _AccountControllerBase with Store {
           return DialogDeleteAccount(this);
         });
   }
+
 }

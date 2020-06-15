@@ -1,7 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:google_place/google_place.dart';
+import 'package:ifix/libs/api.service.dart';
+import 'package:ifix/libs/dialogs.dart';
+import 'package:ifix/libs/localizations.dart';
+import 'package:ifix/libs/sqlite.dart';
+import 'package:ifix/libs/utils.dart';
 import 'package:ifix/models/userModel.dart';
 import 'package:mobx/mobx.dart';
 part "homeController.g.dart";
@@ -11,7 +19,9 @@ class HomeController = _HomeControllerBase with _$HomeController;
 enum ControllerState { initial, loading, done, error, city_empty }
 
 abstract class _HomeControllerBase with Store {
-  UserModel model;
+  final UserModel model;
+  dynamic googleKey;
+  final sqlite = new Sqlite();
   _HomeControllerBase(this.model);
 
   @observable
@@ -29,74 +39,125 @@ abstract class _HomeControllerBase with Store {
         .getDocuments();
   }
 
+  _getKeyGoogle() async {
+    RemoteConfig remoteConfig = await RemoteConfig.instance;
+    await remoteConfig.fetch();
+    await remoteConfig.activateFetched();
+
+    googleKey = remoteConfig.getValue('api_google').asString();
+  }
+
+  @action
+  Future<Map<String, dynamic>> getMecanicsFromGoogle(context) async {
+    await _getKeyGoogle();
+
+    List<Map<String, dynamic>> results = new List();
+    Map<String, dynamic> result = new Map();
+
+    Map<String, dynamic> userLocation =
+        await new Localization().getInitialLocation(model);
+    result['userLocation'] = userLocation;
+
+    await sqlite.startDatabase({
+      'lastModified': new DateTime.now().toString().split(' ').elementAt(0),
+      'latitude': userLocation['latitude'],
+      'longitude': userLocation['longitude']
+    });
+
+    List<Map<String, dynamic>> mecanicsFromFile =
+        await getMecanicsDatabase(context);
+
+    if (mecanicsFromFile.length == 0) {
+      var googlePlace = GooglePlace(googleKey);
+
+      NearBySearchResponse response = await googlePlace.search.getNearBySearch(
+          Location(
+              lat: userLocation['latitude'], lng: userLocation['longitude']),
+          10000,
+          keyword: 'oficina',
+          language: 'pt-BR',
+          type: 'car_repair');
+
+      results.addAll(Utils.convertSearchResultToMap(response.results));
+
+      while (true) {
+        if (response.nextPageToken != null) {
+          response = await googlePlace.search.getNearBySearch(
+              Location(
+                  lat: userLocation['latitude'],
+                  lng: userLocation['longitude']),
+              10000,
+              keyword: 'oficina',
+              language: 'pt-BR',
+              type: 'car_repair',
+              pagetoken: response.nextPageToken);
+
+          results.addAll(Utils.convertSearchResultToMap(response.results));
+        } else {
+          break;
+        }
+      }
+    } else {
+      results = mecanicsFromFile;
+    }
+
+    result['mecanics'] = results;
+
+    if (results.length > 0) {
+      await setMecanicsDatabase(results);
+    }
+
+    return result;
+  }
+
+  Future<List<Map<String, dynamic>>> getMecanicsDatabase(context) async {
+    Map<String, dynamic> configs = await sqlite.getConfig();
+    final geolocator = new Geolocator();
+
+    //double latitude = -29.5076743;
+    //double longitude = -52.572997; //configs['longitude'];
+    double latitude = configs['latitude'];
+    double longitude = configs['longitude'];
+
+    double distanceBetweenLastLoad = await geolocator.distanceBetween(
+        model.userData['localization']['latitude'],
+        model.userData['localization']['longitude'],
+        latitude,
+        longitude);
+
+    if (distanceBetweenLastLoad > 5000) {
+      return [];
+    } else {
+      return await sqlite.getAllMecanics();
+    }
+  }
+
+  Future<void> setMecanicsDatabase(List<Map<String, dynamic>> mecanics) async {
+    await sqlite.insertMecanics(mecanics);
+  }
+
   Future<void> getIconMarker() async {
     return await BitmapDescriptor.fromAssetImage(
         ImageConfiguration(size: Size(128, 128), devicePixelRatio: 5),
         'assets/flag.png');
   }
 
-  Set<Marker> getMapMarkers(QuerySnapshot mecanics, icon) {
+  Set<Marker> getMapMarkers(
+      List<Map<String, dynamic>> mecanics, icon, context) {
     List<Marker> listMarkers = List();
-    final geolocator = new Geolocator();
 
-    mecanics.documents.forEach((m) {
+    mecanics.forEach((Map<String, dynamic> m) {
       listMarkers.add(Marker(
-          onTap: () async {
-            loadingState = ControllerState.loading;
-
-            this.mecanicSelected = {
-              'mecanic': {'id': m.documentID, 'data': m.data},
-              'distance': await getDistance(geolocator, m)
-            };
-            loadingState = ControllerState.done;
+          onTap: () {
+            model.mecanicSelected = null;
+            new Dialogs().showBottomSheetMecanic(m, context);
           },
           markerId: MarkerId(m['name']),
-          position: LatLng(double.parse(m['localization']['latitude']),
-              double.parse(m['localization']['longitude'])),
+          position: LatLng(m['latitude'], m['longitude']),
           icon: icon));
     });
 
     return listMarkers.toSet();
-  }
-
-  @action
-  Future<dynamic> getMostNearMecanic(List<DocumentSnapshot> mecanics) async {
-    loadingState = ControllerState.loading;
-
-    if (model.userData['city'] == null) {
-      loadingState = ControllerState.city_empty;
-      return null;
-    }
-
-    dynamic mostNear;
-    double mostNearDystance = 9999999;
-    final geolocator = new Geolocator();
-
-    await Future.forEach(mecanics, (DocumentSnapshot m) async {
-      double distance = await getDistance(geolocator, m);
-
-      if (distance < mostNearDystance &&
-          (distance / 1000) < model.userData['configs']['max_distance']) {
-        mostNear = {'data': m.data, 'id': m.documentID};
-        mostNearDystance = distance;
-      }
-    });
-
-    loadingState = ControllerState.done;
-
-    mecanicSelected = {'mecanic': mostNear, 'distance': mostNearDystance};
-  }
-
-  Future<dynamic> getDistance(geolocator, mecanic) async {
-    return await geolocator.distanceBetween(
-        model.userData['localization']['latitude'],
-        model.userData['localization']['longitude'],
-        double.parse(mecanic.data['localization']['latitude']),
-        double.parse(mecanic.data['localization']['longitude']));
-  }
-
-  String formatDistance(double distance) {
-    return (distance / 1000).toStringAsFixed(2) + ' km';
   }
 
   Future<void> updateCity(city) async {

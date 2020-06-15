@@ -30,7 +30,6 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
             scaffoldBackgroundColor: Colors.white,
             backgroundColor: Colors.white,
-            /* color: const Color.fromRGBO(150, 11, 25, 1),*/
             primaryColor: const Color.fromRGBO(0, 89, 208, 1),
           ),
           home: Signup()),

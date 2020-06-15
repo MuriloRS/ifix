@@ -1,13 +1,10 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:ifix/controllers/callController.dart';
 import 'package:ifix/models/userModel.dart';
 import 'package:ifix/views/home.dart';
-import 'package:ifix/widgets/finished_service_screen.dart';
-import 'package:ifix/widgets/loader.dart';
-import 'package:ifix/widgets/mecanic_founded_screen.dart';
-import 'package:ifix/widgets/progress_service_screen.dart';
 import 'package:mobx/mobx.dart';
+import 'package:outline_material_icons/outline_material_icons.dart';
 import 'package:provider/provider.dart';
 
 class SearchMecanic extends StatefulWidget {
@@ -35,36 +32,76 @@ class _SearchMecanicState extends State<SearchMecanic> {
     return Material(
         child: SafeArea(
             child: Center(
-                child: StreamBuilder(
-                    stream: Firestore.instance
-                        .collection('mecanics')
-                        .document(widget.mecanic['id'])
-                        .snapshots(),
-                    builder:
-                        (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-                      if (snapshot.data == null) {
-                        return Loader();
-                      } else if (snapshot.data['call'] != null &&
-                              (snapshot.connectionState.index ==
-                                  ConnectionState.done.index ||
-                          snapshot.connectionState.index ==
-                              ConnectionState.active.index)) {
-                        if (snapshot.data['call']['state'] == 'IN_PROGRESS') {
-                          Navigator.of(context).pop();
-
-                          return ProgressServiceScreen(snapshot.data);
-                        } else if (snapshot.data['call']['state'] ==
-                            'FINISHED') {
-                          return FinishedServiceScreen(
-                              snapshot.data, controller);
-                        }
-                      } else if (controller.stateLoading ==
-                          ControllerState.loading) {
-                        return Loader();
-                      }
-
-                      return MecanicFoundedScreen(
-                          widget.mecanic, widget.distance, controller);
-                    }))));
+                child: Container(
+                    color: Colors.white,
+                    padding: EdgeInsets.symmetric(vertical: 25, horizontal: 20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text("Mecânico encontrado!",
+                            style: TextStyle(
+                                fontSize: 26,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.green[700])),
+                        SizedBox(
+                          height: 35,
+                        ),
+                        Text(
+                          "Nome: ${widget.mecanic['data']['name']}",
+                          style: TextStyle(fontSize: 18),
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Text(
+                              "Avaliação média: ",
+                              style: TextStyle(fontSize: 18),
+                            ),
+                            RatingBar(
+                              initialRating: widget.mecanic['data']['rating'],
+                              minRating: 1,
+                              direction: Axis.horizontal,
+                              allowHalfRating: true,
+                              ignoreGestures: true,
+                              itemCount: 5,
+                              glow: false,
+                              itemSize: 22,
+                              onRatingUpdate: (r) {},
+                              itemBuilder: (context, _) => Icon(
+                                Icons.star,
+                                color: Colors.amber,
+                                size: 8,
+                              ),
+                            ),
+                            IconButton(
+                                color: Colors.blueAccent[700],
+                                icon:
+                                    Icon(OMIcons.comment, color: Colors.black),
+                                iconSize: 18,
+                                onPressed: () {
+                                  /* showCupertinoDialog(
+                          context: context,
+                          builder: (context) {
+                            return DialogMecanicComments(mecanic['id']);
+                          });*/
+                                })
+                          ],
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Text(
+                          "Distância: ${widget.distance}",
+                          style: TextStyle(fontSize: 18),
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        SizedBox()
+                      ],
+                    )))));
   }
 }

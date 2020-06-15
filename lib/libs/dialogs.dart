@@ -3,15 +3,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:ifix/controllers/loginController.dart';
+import 'package:ifix/controllers/loginController.dart' as lController;
 import 'package:ifix/libs/files.dart';
 import 'package:ifix/libs/style.dart';
-import 'package:ifix/models/userModel.dart';
+import 'package:ifix/widgets/dialog_comments.dart';
 import 'package:ifix/widgets/dialog_login.dart';
 import 'package:ifix/widgets/loader.dart';
+import 'package:ifix/widgets/modal_bottom_sheet_mecanic.dart';
 import 'package:mobx/mobx.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:outline_material_icons/outline_material_icons.dart';
-import 'package:provider/provider.dart';
 import 'package:toast/toast.dart';
 
 class Dialogs {
@@ -113,7 +114,7 @@ class Dialogs {
         });
   }
 
-  void dialogLogin(context, LoginController controller) {
+  void dialogLogin(context, lController.LoginController controller) {
     final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
     showDialog(
@@ -121,9 +122,11 @@ class Dialogs {
         barrierDismissible: false,
         builder: (context) {
           autorun((_) {
-            if (controller.stateLoading == ControllerState.errorLogin) {
+            if (controller.stateLoading ==
+                lController.ControllerState.errorLogin) {
               Toast.show(controller.errorMessage, context,
-                  backgroundColor: Colors.red[700].withOpacity(0.8), duration: 5);
+                  backgroundColor: Colors.red[700].withOpacity(0.8),
+                  duration: 5);
             }
           });
 
@@ -213,7 +216,8 @@ class Dialogs {
                               name: 'Login observer',
                               builder: (_) {
                                 return controller.stateLoading ==
-                                        ControllerState.loadingPassword
+                                        lController
+                                            .ControllerState.loadingPassword
                                     ? Loader()
                                     : RaisedButton(
                                         onPressed: () async {
@@ -241,6 +245,33 @@ class Dialogs {
                       ],
                     )),
               ));
+        });
+  }
+
+  void showBottomSheetMecanic(m, context) {
+    showBarModalBottomSheet(
+        context: context,
+        enableDrag: false,
+        bounce: true,
+        elevation: 5,
+        barrierColor: Colors.black.withOpacity(0.6),
+        isDismissible: true,
+        builder: (context, scrollController) {
+          return ModalBottomSheetMecanic(m);
+        });
+  }
+
+  void showReviewsDialog(List<dynamic> reviews, context) {
+    showBarModalBottomSheet(
+        context: context,
+        enableDrag: false,
+        bounce: false,
+        elevation: 5,
+        expand: false,
+        barrierColor: Colors.black.withOpacity(0.6),
+        isDismissible: true,
+        builder: (context, scrollController) {
+          return DialogComments(reviews);
         });
   }
 }

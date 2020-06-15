@@ -44,12 +44,13 @@ mixin _$HomeController on _HomeControllerBase, Store {
     }, _$mecanicSelectedAtom, name: '${_$mecanicSelectedAtom.name}_set');
   }
 
-  final _$getMostNearMecanicAsyncAction = AsyncAction('getMostNearMecanic');
+  final _$getMecanicsFromGoogleAsyncAction =
+      AsyncAction('getMecanicsFromGoogle');
 
   @override
-  Future<dynamic> getMostNearMecanic(List<DocumentSnapshot> mecanics) {
-    return _$getMostNearMecanicAsyncAction
-        .run(() => super.getMostNearMecanic(mecanics));
+  Future<Map<String, dynamic>> getMecanicsFromGoogle(dynamic context) {
+    return _$getMecanicsFromGoogleAsyncAction
+        .run(() => super.getMecanicsFromGoogle(context));
   }
 
   final _$_HomeControllerBaseActionController =
