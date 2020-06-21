@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:ifix/views/tabs/account_tab.dart';
 import 'package:ifix/views/tabs/be_mecanic.dart';
 import 'package:ifix/views/tabs/configs_tab.dart';
+import 'package:ifix/views/tabs/contact_tab.dart';
 import 'package:ifix/views/tabs/historic_tab.dart';
 import 'package:ifix/views/tabs/home_tab.dart';
 import 'package:ifix/widgets/drawer.dart';
@@ -20,7 +21,7 @@ class Home extends StatelessWidget {
           drawer: MenuDrawer(_pageController),
         ),
         Scaffold(
-          body: HistoricTab(),
+          body: ContactTab(),
           drawer: MenuDrawer(_pageController),
         ),
         Scaffold(

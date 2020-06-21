@@ -19,7 +19,6 @@ class HomeTab extends StatelessWidget {
     autorun((_) async {
       switch (controller.loadingState) {
         case ControllerState.done:
-
           Navigator.of(context).pop();
 
           if (controller.mecanicSelected['mecanic'] == null) {
@@ -77,9 +76,10 @@ class HomeTab extends StatelessWidget {
               mapType: MapType.normal,
               initialCameraPosition: _kGooglePlex,
               myLocationEnabled: true,
-
               markers: controller.getMapMarkers(
-                  snapshot.data.elementAt(0)['mecanics'], snapshot.data.elementAt(1), context),
+                  snapshot.data.elementAt(0)['mecanics'],
+                  snapshot.data.elementAt(1),
+                  context),
             );
           },
         ),

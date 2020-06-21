@@ -43,6 +43,7 @@ class Signup extends StatelessWidget {
         ));
       } else if (controller.stateLoading == ControllerState.done) {
         if (userProvider.user.isEmailVerified) {
+          Navigator.pop(context);
           Navigator.pushReplacement(context,
               MaterialPageRoute(builder: (c) => Material(child: Home())));
         } else {

@@ -1,4 +1,3 @@
-import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:ifix/controllers/accountController.dart';
@@ -16,9 +15,7 @@ class AccountTab extends StatelessWidget {
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserModel>(context);
     final controller = new AccountController(userProvider);
-    final autocompleteKey = new GlobalKey<AutoCompleteTextFieldState<String>>();
-    final cityController =
-        new TextEditingController(text: userProvider.userData['city']);
+
 
     autorun((_) {
       if (controller.loadingState == ControllerState.done) {
@@ -84,7 +81,7 @@ class AccountTab extends StatelessWidget {
                                   Text("Cidade",
                                       textAlign: TextAlign.start,
                                       style: Style.labelFieldStyle()),
-                                  SimpleAutoCompleteTextField(
+                                  /*SimpleAutoCompleteTextField(
                                     clearOnSubmit: false,
                                     textSubmitted: (s) async {
                                       await controller.saveField(s, 'city');
@@ -95,7 +92,7 @@ class AccountTab extends StatelessWidget {
                                     decoration: Style.textFieldDecoration(
                                         Icon(OMIcons.map)),
                                   ),
-                                  SizedBox(height: 20),
+                                  SizedBox(height: 20),*/
                                   Text("Telefone",
                                       textAlign: TextAlign.start,
                                       style: Style.labelFieldStyle()),

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_email_sender/flutter_email_sender.dart';
 
 class DrawerTile extends StatelessWidget {
   final PageController pageController;
@@ -14,17 +13,10 @@ class DrawerTile extends StatelessWidget {
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-            onTap: () async{
+            onTap: () async {
               Navigator.of(context).pop();
-              if (this.page == -1) {
-                final Email email = Email(
-                  recipients: ['murilo08inter@gmail.com'],
-                );
 
-                await FlutterEmailSender.send(email);
-              } else {
-                pageController.jumpToPage(this.page);
-              }
+              pageController.jumpToPage(this.page);
             },
             child: Container(
               padding: EdgeInsets.only(left: 25),

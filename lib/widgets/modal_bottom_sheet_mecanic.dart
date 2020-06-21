@@ -228,7 +228,7 @@ class ModalBottomSheetMecanic extends StatelessWidget {
   }
 
   Widget _getWidgetOpenNow(opennow) {
-    return opennow == false
+    return opennow != null
         ? Column(
             children: <Widget>[
               SizedBox(

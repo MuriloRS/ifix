@@ -57,7 +57,9 @@ abstract class _MecanicControllerBase with Store {
       'rating': mecanic['rating'],
       'nRating': mecanic['nRating'],
       'website': mecanic['website'],
-      'open_now': result['result']['opening_hours']['open_now'],
+      'open_now': result['result']['opening_hours'] != null
+          ? result['result']['opening_hours']['open_now']
+          : null,
       'reviews': result['result']['reviews'],
     };
   }

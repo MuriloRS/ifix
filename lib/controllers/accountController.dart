@@ -35,8 +35,7 @@ abstract class _AccountControllerBase with Store {
       case 'phone':
         newData['phone'] = value;
         break;
-      case 'city':
-        newData['city'] = value;
+   
         break;
     }
 
@@ -85,4 +84,19 @@ abstract class _AccountControllerBase with Store {
         });
   }
 
+  @action
+  Future<void> sendContact(assunto, descricao) async{
+    loadingState = ControllerState.loading;
+
+    final Email mailOptions = Email(
+      body: descricao,
+      subject: assunto,
+      recipients: ['murilointer2011@hotmail.com'],
+      isHTML: true,
+    );
+
+    await FlutterEmailSender.send(mailOptions);
+
+    loadingState = ControllerState.done;
+  }
 }

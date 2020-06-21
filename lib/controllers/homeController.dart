@@ -73,35 +73,37 @@ abstract class _HomeControllerBase with Store {
       NearBySearchResponse response = await googlePlace.search.getNearBySearch(
           Location(
               lat: userLocation['latitude'], lng: userLocation['longitude']),
-          10000,
+          5000,
           keyword: 'oficina',
           language: 'pt-BR',
           type: 'car_repair');
 
       results.addAll(Utils.convertSearchResultToMap(response.results));
 
-      while (true) {
-        if (response.nextPageToken != null) {
+      if (response.nextPageToken != null) {
+        await Future.doWhile(() async {
           response = await googlePlace.search.getNearBySearch(
               Location(
                   lat: userLocation['latitude'],
                   lng: userLocation['longitude']),
-              10000,
+              5000,
               keyword: 'oficina',
               language: 'pt-BR',
               type: 'car_repair',
               pagetoken: response.nextPageToken);
 
+          await Future.delayed(Duration(milliseconds: 1500));
+
           results.addAll(Utils.convertSearchResultToMap(response.results));
-        } else {
-          break;
-        }
+
+          if (response.nextPageToken == null) return false;
+          return true;
+        });
       }
-    } else {
-      results = mecanicsFromFile;
     }
 
-    result['mecanics'] = results;
+    result['mecanics'] =
+        mecanicsFromFile.length == 0 ? results : mecanicsFromFile;
 
     if (results.length > 0) {
       await setMecanicsDatabase(results);

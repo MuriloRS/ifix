@@ -44,7 +44,7 @@ class MenuDrawer extends StatelessWidget {
         child: Column(
           children: <Widget>[
             DrawerTile(OMIcons.home, "Início", pageController, 0),
-            DrawerTile(OMIcons.email, "Contato", pageController, -1),
+            DrawerTile(OMIcons.email, "Contato", pageController, 1),
             DrawerTile(OMIcons.person, "Conta", pageController, 2),
           ],
         ),
