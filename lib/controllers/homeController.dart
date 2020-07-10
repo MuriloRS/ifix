@@ -5,13 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_place/google_place.dart';
-import 'package:ifix/libs/api.service.dart';
 import 'package:ifix/libs/dialogs.dart';
 import 'package:ifix/libs/localizations.dart';
 import 'package:ifix/libs/sqlite.dart';
 import 'package:ifix/libs/utils.dart';
 import 'package:ifix/models/userModel.dart';
 import 'package:mobx/mobx.dart';
+import 'package:permission_handler/permission_handler.dart';
 part "homeController.g.dart";
 
 class HomeController = _HomeControllerBase with _$HomeController;
@@ -54,8 +54,16 @@ abstract class _HomeControllerBase with Store {
     List<Map<String, dynamic>> results = new List();
     Map<String, dynamic> result = new Map();
 
-    Map<String, dynamic> userLocation =
-        await new Localization().getInitialLocation(model);
+    Map<String, dynamic> userLocation;
+
+    await checkUserPermission();
+
+    userLocation = await new Localization().getInitialLocation(model);
+
+    if (userLocation==null) {
+      userLocation = {'latitude': -29.7182343, 'longitude': -52.4286316};
+    }
+
     result['userLocation'] = userLocation;
 
     await sqlite.startDatabase({
@@ -160,6 +168,15 @@ abstract class _HomeControllerBase with Store {
     });
 
     return listMarkers.toSet();
+  }
+
+  Future<bool> checkUserPermission() async {
+    if (await Permission.location.isGranted) {
+      return true;
+    }
+
+    await Permission.location.request();
+    return false;
   }
 
   Future<void> updateCity(city) async {

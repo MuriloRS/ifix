@@ -32,11 +32,6 @@ abstract class _AccountControllerBase with Store {
       case 'email':
         newData['email'] = value;
         break;
-      case 'phone':
-        newData['phone'] = value;
-        break;
-   
-        break;
     }
 
     model.userData = newData;

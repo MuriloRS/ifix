@@ -1,8 +1,7 @@
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:ifix/libs/api.service.dart';
-import 'package:ifix/libs/sqlite.dart';
+import 'package:ifix/libs/api_service.dart';
 import 'package:ifix/libs/utils.dart';
 import 'package:ifix/models/userModel.dart';
 import 'package:mobx/mobx.dart';
@@ -49,7 +48,7 @@ abstract class _MecanicControllerBase with Store {
     dynamic googleKey = remoteConfig.getValue('api_google').asString();
 
     dynamic result = await ApiService.httpRequestGet(
-        "https://maps.googleapis.com/maps/api/place/details/json?place_id=${mecanic['placeid']}&fields=formatted_phone_number,website,opening_hours,review&key=$googleKey");
+        "https://maps.googleapis.com/maps/api/place/details/json?place_id=${mecanic['placeid']}&fields=formatted_phone_number,website,opening_hours,review&key=$googleKey&language=pt-BR");
     return {
       'telephone': result["result"]["formatted_phone_number"],
       'formattedAddress': mecanic['formattedAddress'],
@@ -59,6 +58,9 @@ abstract class _MecanicControllerBase with Store {
       'website': mecanic['website'],
       'open_now': result['result']['opening_hours'] != null
           ? result['result']['opening_hours']['open_now']
+          : null,
+      'weekday_text': result['result']['opening_hours'] != null
+          ? result['result']['opening_hours']['weekday_text']
           : null,
       'reviews': result['result']['reviews'],
     };

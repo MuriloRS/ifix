@@ -77,11 +77,11 @@ class AccountTab extends StatelessWidget {
                                       keyboardType: TextInputType.text,
                                       decoration: Style.textFieldDecoration(
                                           Icon(OMIcons.alternateEmail))),
-                                  SizedBox(height: 20),
+                                  /*SizedBox(height: 20),
                                   Text("Cidade",
                                       textAlign: TextAlign.start,
                                       style: Style.labelFieldStyle()),
-                                  /*SimpleAutoCompleteTextField(
+                                  SimpleAutoCompleteTextField(
                                     clearOnSubmit: false,
                                     textSubmitted: (s) async {
                                       await controller.saveField(s, 'city');
@@ -91,8 +91,8 @@ class AccountTab extends StatelessWidget {
                                     key: autocompleteKey,
                                     decoration: Style.textFieldDecoration(
                                         Icon(OMIcons.map)),
-                                  ),
-                                  SizedBox(height: 20),*/
+                                  ),*/
+                                  SizedBox(height: 20),
                                   Text("Telefone",
                                       textAlign: TextAlign.start,
                                       style: Style.labelFieldStyle()),

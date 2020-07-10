@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:ifix/libs/utils.dart';
+import 'package:ifix/models/userModel.dart';
 import 'package:ifix/widgets/drawer_tile.dart';
 import 'package:outline_material_icons/outline_material_icons.dart';
+import 'package:provider/provider.dart';
 
 class MenuDrawer extends StatelessWidget {
   final PageController pageController;
@@ -8,8 +11,10 @@ class MenuDrawer extends StatelessWidget {
   MenuDrawer(this.pageController);
   @override
   Widget build(BuildContext context) {
+    final userModel = Provider.of<UserModel>(context);
+
     return Drawer(
-        child: Column(children: <Widget>[
+        child: Column(mainAxisSize: MainAxisSize.max, children: <Widget>[
       SizedBox(height: 35),
       Container(
         padding: EdgeInsets.only(top: 20, left: 25),
@@ -20,11 +25,13 @@ class MenuDrawer extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
-                  "Murilo",
+                  userModel.userData['name'],
+                  textAlign: TextAlign.start,
                   style: TextStyle(fontSize: 18, color: Colors.black),
                 ),
                 Text(
-                  "murilo_haas@outlook.com",
+                  userModel.userData["email"],
+                  textAlign: TextAlign.start,
                   style: TextStyle(fontSize: 16, color: Colors.grey[800]),
                 )
               ],
@@ -42,6 +49,7 @@ class MenuDrawer extends StatelessWidget {
       Container(
         padding: EdgeInsets.symmetric(horizontal: 0, vertical: 10),
         child: Column(
+          mainAxisSize: MainAxisSize.max,
           children: <Widget>[
             DrawerTile(OMIcons.home, "Início", pageController, 0),
             DrawerTile(OMIcons.email, "Contato", pageController, 1),
@@ -49,6 +57,25 @@ class MenuDrawer extends StatelessWidget {
           ],
         ),
       ),
+      Expanded(
+        child: Container(),
+      ),
+      Expanded(
+        child: Container(),
+      ),
+      Expanded(
+        child: Container(),
+      ),
+      Expanded(
+          flex: 1,
+          child: FlatButton(
+            onPressed: Utils.openTermos,
+            child: Text(
+              "Termos e Privacidade",
+              style: TextStyle(decoration: TextDecoration.underline),
+              textAlign: TextAlign.center,
+            ),
+          ))
     ]));
   }
 }

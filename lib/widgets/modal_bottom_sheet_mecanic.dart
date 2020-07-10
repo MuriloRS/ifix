@@ -5,9 +5,11 @@ import 'package:ifix/controllers/mecanicController.dart';
 import 'package:ifix/libs/dialogs.dart';
 import 'package:ifix/libs/utils.dart';
 import 'package:ifix/models/userModel.dart';
+import 'package:ifix/widgets/button_time.dart';
 import 'package:ifix/widgets/loader.dart';
 import 'package:outline_material_icons/outline_material_icons.dart';
 import 'package:provider/provider.dart';
+import 'package:super_tooltip/super_tooltip.dart';
 
 class ModalBottomSheetMecanic extends StatelessWidget {
   MecanicController controller;
@@ -56,7 +58,8 @@ class ModalBottomSheetMecanic extends StatelessWidget {
         SizedBox(
           height: 15,
         ),
-        _getWidgetOpenNow(userModel.mecanicSelected['open_now']),
+        _getWidgetOpenNow(userModel.mecanicSelected['open_now'],
+            userModel.mecanicSelected['weekday_text'], context),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -227,23 +230,67 @@ class ModalBottomSheetMecanic extends StatelessWidget {
         ));
   }
 
-  Widget _getWidgetOpenNow(opennow) {
-    return opennow != null
-        ? Column(
-            children: <Widget>[
-              SizedBox(
-                height: 5,
-              ),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                child: Text("Está aberto!", style:TextStyle(fontSize: 16, color:Colors.white)),
-                color: Colors.green,
-              ),
-              SizedBox(
-                height: 10,
-              ),
-            ],
-          )
-        : Container();
+  SuperTooltip _getTimeTooltip(weekdayText) {
+    String text = "HORÁRIOS:\n\n";
+
+    weekdayText
+        .forEach((time) => [text += time.toString().toUpperCase() + "\n"]);
+
+    return SuperTooltip(
+      popupDirection: TooltipDirection.down,
+      borderColor: Colors.white,
+      arrowLength: 15,
+      arrowTipDistance: 30,
+      backgroundColor: Colors.white,
+      hasShadow: true,
+      showCloseButton: ShowCloseButton.inside,
+      content: new Material(
+          color: const Color.fromRGBO(255, 255, 255, 1),
+          child: Text(
+            text,
+            softWrap: true,
+          )),
+    );
+  }
+
+  Widget _getWidgetOpenNow(opennow, weekdayText, context) {
+    SuperTooltip tooltip =
+        weekdayText != null ? _getTimeTooltip(weekdayText) : null;
+
+    return Column(
+      children: <Widget>[
+        SizedBox(
+          height: 5,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            opennow != null
+                ? opennow
+                    ? Container(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                        child: Text("Aberto!",
+                            style:
+                                TextStyle(fontSize: 16, color: Colors.white)),
+                        color: Colors.green,
+                      )
+                    : Container(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                        child: Text("Fechado!",
+                            style:
+                                TextStyle(fontSize: 16, color: Colors.white)),
+                        color: Colors.red,
+                      )
+                : Container(),
+            weekdayText != null ? ButtonTime(tooltip) : Container()
+          ],
+        ),
+        SizedBox(
+          height: 10,
+        ),
+      ],
+    );
   }
 }

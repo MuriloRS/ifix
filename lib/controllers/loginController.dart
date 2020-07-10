@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
+import 'package:ifix/libs/utils.dart';
 import 'package:ifix/models/userModel.dart';
 import 'package:mobx/mobx.dart';
+import 'package:url_launcher/url_launcher.dart';
 part "loginController.g.dart";
 
 class LoginController = _LoginControllerBase with _$LoginController;
@@ -38,12 +40,6 @@ abstract class _LoginControllerBase with Store {
   changeEmail(dynamic newValue) => email = newValue;
 
   @observable
-  String phone;
-
-  @action
-  changePhone(dynamic newValue) => phone = newValue;
-
-  @observable
   String errorMessage = '';
 
   @observable
@@ -58,9 +54,12 @@ abstract class _LoginControllerBase with Store {
   @observable
   bool isEmailVerified = false;
 
+  @observable
+  bool checkTerms = false;
+
   @computed
   Map get newUser {
-    return {"name": name, "email": email, "phone": phone, 'city': city};
+    return {"name": name, "email": email, 'city': city};
   }
 
   @action
@@ -69,7 +68,7 @@ abstract class _LoginControllerBase with Store {
 
     try {
       final FirebaseAuth _auth = FirebaseAuth.instance;
-
+  
       AuthResult result = await _auth.createUserWithEmailAndPassword(
           email: email.toString().trim(), password: password.toString().trim());
 
@@ -79,7 +78,6 @@ abstract class _LoginControllerBase with Store {
         dynamic userModel = {
           'email': newUser['email'],
           'name': newUser['name'],
-          'phone': newUser['phone'],
           'city': city,
           'created': DateTime.now(),
           'vehicle': '',
@@ -164,6 +162,11 @@ abstract class _LoginControllerBase with Store {
       }
       stateLoading = ControllerState.errorLogin;
     }
+  }
+
+  @action
+  Future<void> openTerms() async{
+    await Utils.openTermos();
   }
 
   @action

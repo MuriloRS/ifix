@@ -67,23 +67,6 @@ mixin _$LoginController on _LoginControllerBase, Store {
     }, _$emailAtom, name: '${_$emailAtom.name}_set');
   }
 
-  final _$phoneAtom = Atom(name: '_LoginControllerBase.phone');
-
-  @override
-  String get phone {
-    _$phoneAtom.context.enforceReadPolicy(_$phoneAtom);
-    _$phoneAtom.reportObserved();
-    return super.phone;
-  }
-
-  @override
-  set phone(String value) {
-    _$phoneAtom.context.conditionallyRunInAction(() {
-      super.phone = value;
-      _$phoneAtom.reportChanged();
-    }, _$phoneAtom, name: '${_$phoneAtom.name}_set');
-  }
-
   final _$errorMessageAtom = Atom(name: '_LoginControllerBase.errorMessage');
 
   @override
@@ -153,6 +136,23 @@ mixin _$LoginController on _LoginControllerBase, Store {
     }, _$isEmailVerifiedAtom, name: '${_$isEmailVerifiedAtom.name}_set');
   }
 
+  final _$checkTermsAtom = Atom(name: '_LoginControllerBase.checkTerms');
+
+  @override
+  bool get checkTerms {
+    _$checkTermsAtom.context.enforceReadPolicy(_$checkTermsAtom);
+    _$checkTermsAtom.reportObserved();
+    return super.checkTerms;
+  }
+
+  @override
+  set checkTerms(bool value) {
+    _$checkTermsAtom.context.conditionallyRunInAction(() {
+      super.checkTerms = value;
+      _$checkTermsAtom.reportChanged();
+    }, _$checkTermsAtom, name: '${_$checkTermsAtom.name}_set');
+  }
+
   final _$doRegisterAsyncAction = AsyncAction('doRegister');
 
   @override
@@ -174,6 +174,13 @@ mixin _$LoginController on _LoginControllerBase, Store {
   @override
   Future<void> signIn(dynamic email, dynamic password) {
     return _$signInAsyncAction.run(() => super.signIn(email, password));
+  }
+
+  final _$openTermsAsyncAction = AsyncAction('openTerms');
+
+  @override
+  Future<void> openTerms() {
+    return _$openTermsAsyncAction.run(() => super.openTerms());
   }
 
   final _$recoverPasswordAsyncAction = AsyncAction('recoverPassword');
@@ -217,16 +224,6 @@ mixin _$LoginController on _LoginControllerBase, Store {
   }
 
   @override
-  dynamic changePhone(dynamic newValue) {
-    final _$actionInfo = _$_LoginControllerBaseActionController.startAction();
-    try {
-      return super.changePhone(newValue);
-    } finally {
-      _$_LoginControllerBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
   dynamic changePassword(dynamic newValue) {
     final _$actionInfo = _$_LoginControllerBaseActionController.startAction();
     try {
@@ -239,7 +236,7 @@ mixin _$LoginController on _LoginControllerBase, Store {
   @override
   String toString() {
     final string =
-        'name: ${name.toString()},city: ${city.toString()},email: ${email.toString()},phone: ${phone.toString()},errorMessage: ${errorMessage.toString()},password: ${password.toString()},stateLoading: ${stateLoading.toString()},isEmailVerified: ${isEmailVerified.toString()},newUser: ${newUser.toString()}';
+        'name: ${name.toString()},city: ${city.toString()},email: ${email.toString()},errorMessage: ${errorMessage.toString()},password: ${password.toString()},stateLoading: ${stateLoading.toString()},isEmailVerified: ${isEmailVerified.toString()},checkTerms: ${checkTerms.toString()},newUser: ${newUser.toString()}';
     return '{$string}';
   }
 }

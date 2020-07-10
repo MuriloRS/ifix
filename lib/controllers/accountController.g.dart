@@ -40,6 +40,14 @@ mixin _$AccountController on _AccountControllerBase, Store {
     return _$deleteAccountAsyncAction.run(() => super.deleteAccount(context));
   }
 
+  final _$sendContactAsyncAction = AsyncAction('sendContact');
+
+  @override
+  Future<void> sendContact(dynamic assunto, dynamic descricao) {
+    return _$sendContactAsyncAction
+        .run(() => super.sendContact(assunto, descricao));
+  }
+
   @override
   String toString() {
     final string = 'loadingState: ${loadingState.toString()}';

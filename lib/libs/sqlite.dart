@@ -16,10 +16,7 @@ class Sqlite {
         if (initialSettings != null) {
           db = await openDatabase(path, version: 1,
               onCreate: (Database db, int version) async {
-            Position pos = await new Localization().getCurrentPosition();
-
-            initialSettings['latitude'] = pos.latitude;
-            initialSettings['longitude'] = pos.longitude;
+            
             await db.execute(
                 'CREATE TABLE Mecanic(id STRING,placeid TEXT, name TEXT, latitude REAL, longitude REAL, weekdayText TEXT, formattedAddress TEXT, number TEXT, rating REAL, nRating INTEGER)');
             await db.execute(

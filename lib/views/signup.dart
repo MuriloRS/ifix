@@ -12,12 +12,12 @@ import 'package:ifix/widgets/loader.dart';
 import 'package:mobx/mobx.dart';
 import 'package:outline_material_icons/outline_material_icons.dart';
 import 'package:provider/provider.dart';
+import 'package:toast/toast.dart';
 
 class Signup extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
-    var phoneController = new MaskedTextController(mask: '(00) 00000-0000');
 
     final _scaffoldKey = new GlobalKey<ScaffoldState>();
     final userProvider = Provider.of<UserModel>(context);
@@ -47,8 +47,10 @@ class Signup extends StatelessWidget {
           Navigator.pushReplacement(context,
               MaterialPageRoute(builder: (c) => Material(child: Home())));
         } else {
+          /*Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (c) => EmailConfirm()));*/
           Navigator.pushReplacement(
-              context, MaterialPageRoute(builder: (c) => EmailConfirm()));
+              context, MaterialPageRoute(builder: (c) => Home()));
         }
       }
     });
@@ -79,7 +81,7 @@ class Signup extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         Image.asset(
-                          'assets/big_logo.png',
+                          'assets/splash.jpg',
                           height: 130,
                         ),
                         Text("Faça o seu cadastro",
@@ -127,23 +129,6 @@ class Signup extends StatelessWidget {
                                 SizedBox(
                                   height: 15,
                                 ),
-                                Text("Telefone*",
-                                    textAlign: TextAlign.start,
-                                    style: Style.labelFieldStyle()),
-                                FormBuilderTextField(
-                                    attribute: 'telefone',
-                                    controller: phoneController,
-                                    onChanged: controller.changePhone,
-                                    validators: [
-                                      FormBuilderValidators.required(
-                                          errorText: "O telefone é obrigatório")
-                                    ],
-                                    keyboardType: TextInputType.number,
-                                    decoration: Style.textFieldDecoration(
-                                        Icon(OMIcons.phone))),
-                                SizedBox(
-                                  height: 15,
-                                ),
                                 Text("Senha*",
                                     textAlign: TextAlign.start,
                                     style: Style.labelFieldStyle()),
@@ -162,6 +147,35 @@ class Signup extends StatelessWidget {
                                 SizedBox(
                                   height: 20,
                                 ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    Observer(
+                                      name: 'termos',
+                                      builder: (_) {
+                                        return Checkbox(
+                                          value: controller.checkTerms,
+                                          onChanged: (bool value) {
+                                            controller.checkTerms =
+                                                !controller.checkTerms;
+                                          },
+                                        );
+                                      },
+                                    ),
+                                    FlatButton(
+                                      child: Text(
+                                          "Termos e Política de Privacidade",
+                                          style: TextStyle(
+                                              color: Colors.grey[800],
+                                              decoration:
+                                                  TextDecoration.underline)),
+                                      onPressed: controller.openTerms,
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 20,
+                                ),
                                 Container(
                                     width: double.infinity,
                                     child: Observer(
@@ -172,6 +186,16 @@ class Signup extends StatelessWidget {
                                               ? Loader()
                                               : RaisedButton(
                                                   onPressed: () {
+                                                    if (!controller
+                                                        .checkTerms) {
+                                                      Toast.show(
+                                                          'Você precisa aceitar os termos',
+                                                          context,
+                                                          duration: 4,
+                                                          backgroundColor:
+                                                              Colors.red);
+                                                      return;
+                                                    }
                                                     if (_fbKey.currentState
                                                         .validate()) {
                                                       controller.doRegister(

@@ -21,42 +21,41 @@ class EmailConfirm extends StatelessWidget {
             context, MaterialPageRoute(builder: (_) => Home()));
       } else {
         _fbKey.currentState.showSnackBar(SnackBar(
-            backgroundColor: Colors.black,
+            backgroundColor: Colors.red,
             content: Text(
                 "Você ainda não validou o seu email, verifique sua caixa de spam.",
+                textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.white))));
       }
     });
 
-    return SafeArea(
-        child: Scaffold(
-            key: _fbKey,
-            resizeToAvoidBottomPadding: true,
-            resizeToAvoidBottomInset: true,
-            body: Container(
-                padding: EdgeInsets.all(25),
-                child: Center(
-                    child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text("Te enviamos um email para você confirmar sua conta.",
-                        style: TextStyle(fontSize: 24),
-                        textAlign: TextAlign.center),
-                    SizedBox(
-                      height: 25,
-                    ),
-                    RaisedButton(
-                      onPressed: controller.verifyConfirmationEmail,
-                      child: Text("Confirmei!",
-                          style: TextStyle(color: Colors.white, fontSize: 22)),
-                      color: Theme.of(context).primaryColor,
-                      padding:
-                          EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                      elevation: 5,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10))),
-                    )
-                  ],
-                )))));
+    return Scaffold(
+        key: _fbKey,
+        resizeToAvoidBottomPadding: true,
+        resizeToAvoidBottomInset: true,
+        body: Container(
+            padding: EdgeInsets.all(25),
+            child: Center(
+                child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text("Te enviamos um email para você confirmar sua conta.",
+                    style: TextStyle(fontSize: 24),
+                    textAlign: TextAlign.center),
+                SizedBox(
+                  height: 25,
+                ),
+                RaisedButton(
+                  onPressed: controller.verifyConfirmationEmail,
+                  child: Text("CONFIRMEI !",
+                      style: TextStyle(color: Colors.white, fontSize: 22)),
+                  color: Theme.of(context).primaryColor,
+                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                  elevation: 5,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10))),
+                )
+              ],
+            ))));
   }
 }
