@@ -4,6 +4,7 @@ import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:ifix/controllers/loginController.dart';
 import 'package:ifix/libs/dialogs.dart';
+import 'package:ifix/libs/listenConnectivity.dart';
 import 'package:ifix/libs/style.dart';
 import 'package:ifix/models/userModel.dart';
 import 'package:ifix/views/email_confirm.dart';
@@ -22,6 +23,8 @@ class Signup extends StatelessWidget {
     final _scaffoldKey = new GlobalKey<ScaffoldState>();
     final userProvider = Provider.of<UserModel>(context);
     final controller = new LoginController(userProvider);
+
+    ListenConnectivity.startListen(context);
 
     autorun((_) {
       if (controller.stateLoading == ControllerState.error) {

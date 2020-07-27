@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_place/google_place.dart';
@@ -12,6 +13,7 @@ import 'package:ifix/libs/utils.dart';
 import 'package:ifix/models/userModel.dart';
 import 'package:mobx/mobx.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:toast/toast.dart';
 part "homeController.g.dart";
 
 class HomeController = _HomeControllerBase with _$HomeController;
@@ -49,75 +51,95 @@ abstract class _HomeControllerBase with Store {
 
   @action
   Future<Map<String, dynamic>> getMecanicsFromGoogle(context) async {
-    await _getKeyGoogle();
+    try {
+      await _getKeyGoogle();
 
-    List<Map<String, dynamic>> results = new List();
-    Map<String, dynamic> result = new Map();
+      List<Map<String, dynamic>> results = new List();
+      Map<String, dynamic> result = new Map();
 
-    Map<String, dynamic> userLocation;
+      Map<String, dynamic> userLocation;
 
-    await checkUserPermission();
+      await checkUserPermission();
 
-    userLocation = await new Localization().getInitialLocation(model);
+      userLocation = {"latitude": -9.5942081, "longitude": -35.8267669};
 
-    if (userLocation==null) {
-      userLocation = {'latitude': -29.7182343, 'longitude': -52.4286316};
-    }
-
-    result['userLocation'] = userLocation;
-
-    await sqlite.startDatabase({
-      'lastModified': new DateTime.now().toString().split(' ').elementAt(0),
-      'latitude': userLocation['latitude'],
-      'longitude': userLocation['longitude']
-    });
-
-    List<Map<String, dynamic>> mecanicsFromFile =
-        await getMecanicsDatabase(context);
-
-    if (mecanicsFromFile.length == 0) {
-      var googlePlace = GooglePlace(googleKey);
-
-      NearBySearchResponse response = await googlePlace.search.getNearBySearch(
-          Location(
-              lat: userLocation['latitude'], lng: userLocation['longitude']),
-          5000,
-          keyword: 'oficina',
-          language: 'pt-BR',
-          type: 'car_repair');
-
-      results.addAll(Utils.convertSearchResultToMap(response.results));
-
-      if (response.nextPageToken != null) {
-        await Future.doWhile(() async {
-          response = await googlePlace.search.getNearBySearch(
-              Location(
-                  lat: userLocation['latitude'],
-                  lng: userLocation['longitude']),
-              5000,
-              keyword: 'oficina',
-              language: 'pt-BR',
-              type: 'car_repair',
-              pagetoken: response.nextPageToken);
-
-          await Future.delayed(Duration(milliseconds: 1500));
-
-          results.addAll(Utils.convertSearchResultToMap(response.results));
-
-          if (response.nextPageToken == null) return false;
-          return true;
-        });
+      if (userLocation == null) {
+        userLocation = {'latitude': -29.7182343, 'longitude': -52.4286316};
       }
+
+      result['userLocation'] = userLocation;
+
+      await sqlite.startDatabase({
+        'lastModified': new DateTime.now().toString().split(' ').elementAt(0),
+        'latitude': userLocation['latitude'],
+        'longitude': userLocation['longitude']
+      });
+
+      List<Map<String, dynamic>> mecanicsFromFile =
+          await getMecanicsDatabase(context);
+
+      if (mecanicsFromFile.length == 0) {
+        var googlePlace = GooglePlace(googleKey);
+
+        NearBySearchResponse response = await googlePlace.search
+            .getNearBySearch(
+                Location(
+                    lat: userLocation['latitude'],
+                    lng: userLocation['longitude']),
+                5000,
+                keyword: 'oficina',
+                language: 'pt-BR',
+                type: 'car_repair');
+
+        results.addAll(Utils.convertSearchResultToMap(response.results));
+
+        if (response.nextPageToken != null) {
+          await Future.doWhile(() async {
+            response = await googlePlace.search.getNearBySearch(
+                Location(
+                    lat: userLocation['latitude'],
+                    lng: userLocation['longitude']),
+                5000,
+                keyword: 'oficina',
+                language: 'pt-BR',
+                type: 'car_repair',
+                pagetoken: response.nextPageToken);
+
+            await Future.delayed(Duration(milliseconds: 1500));
+
+            results.addAll(Utils.convertSearchResultToMap(response.results));
+
+            if (response.nextPageToken == null) return false;
+            return true;
+          });
+        }
+      }
+
+      result['mecanics'] =
+          mecanicsFromFile.length == 0 ? results : mecanicsFromFile;
+
+      if (results.length > 0) {
+        await setMecanicsDatabase(results);
+      }
+
+      return result;
+    } catch (e) {
+      Toast.show(
+          "Desculpe, ocorreu um erro ao buscar as oficinas, nosso time estará corrigindo o problema o mais breve possível.",
+          context,
+          backgroundColor: Colors.white,
+          duration: 5,
+          textColor: Colors.black);
+
+      _sendReport("ERRO AO BUSCAR AS OFICINAS");
+
+      return null;
     }
+  }
 
-    result['mecanics'] =
-        mecanicsFromFile.length == 0 ? results : mecanicsFromFile;
-
-    if (results.length > 0) {
-      await setMecanicsDatabase(results);
-    }
-
-    return result;
+  void _sendReport(error) {
+    Firestore.instance.collection("errors").add(
+        {"user": this.model.user.uid, "date": DateTime.now(), "error": error});
   }
 
   Future<List<Map<String, dynamic>>> getMecanicsDatabase(context) async {

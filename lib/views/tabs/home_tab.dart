@@ -65,7 +65,9 @@ class HomeTab extends StatelessWidget {
               return Loader();
             }
 
-            final position = snapshot.data.elementAt(0)['userLocation'];
+            final position = snapshot.data.elementAt(0) == null
+                ? {"latitude": -29.7123533, "longitude": -52.4358913}
+                : snapshot.data.elementAt(0)['userLocation'];
             final CameraPosition _kGooglePlex = CameraPosition(
               target: LatLng(position['latitude'], position['longitude']),
               zoom: 14.9746,

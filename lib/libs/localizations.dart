@@ -32,7 +32,7 @@ class Localization {
   }
 
   Future<Position> getCurrentPosition() async {
-    return await Geolocator()
-        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    return await Geolocator().getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.bestForNavigation);
   }
 }
