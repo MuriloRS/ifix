@@ -1,38 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:ifix/models/userModel.dart';
-import 'package:ifix/views/signup.dart';
+import 'package:get/get.dart';
+import 'package:ifix/app/data/model/userModel.dart';
+import 'package:ifix/app/ui/pages/home_page/home_page.dart';
+import 'package:ifix/app/ui/themes/myTheme.dart';
 import 'package:provider/provider.dart';
 
-void main() => runApp(MyApp());
+import 'app/routes/app_pages.dart';
 
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light.copyWith(
-        systemNavigationBarDividerColor: Colors.transparent,
-        systemNavigationBarColor: Colors.transparent,
-        statusBarColor: Colors.transparent,
-        statusBarIconBrightness: Brightness.dark,
-        systemNavigationBarIconBrightness: Brightness.dark,
-        statusBarBrightness: Brightness.light));
+void main() {
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light.copyWith(
+      systemNavigationBarDividerColor: Colors.transparent,
+      systemNavigationBarColor: Colors.transparent,
+      statusBarColor: Colors.transparent,
+      statusBarIconBrightness: Brightness.dark,
+      systemNavigationBarIconBrightness: Brightness.dark,
+      statusBarBrightness: Brightness.light));
 
-    return MultiProvider(
+  runApp(MultiProvider(
       providers: [
         ChangeNotifierProvider<UserModel>.value(
           value: UserModel(null, null),
         )
       ],
-      child: MaterialApp(
-          title: 'iFix',
-          debugShowCheckedModeBanner: false,
-          color: Colors.white,
-          theme: ThemeData(
-            scaffoldBackgroundColor: Colors.white,
-            backgroundColor: Colors.white,
-            primaryColor: const Color.fromRGBO(0, 89, 208, 1),
-          ),
-          home: Signup()),
-    );
-  }
+      child: GetMaterialApp(
+        debugShowCheckedModeBanner: false,
+        initialRoute: Routes.SIGNUP, //Rota inicial
+        defaultTransition: Transition.fade, // Transição de telas padrão
+        getPages: AppPages
+            .pages, // Seu array de navegação contendo as rotas e suas pages
+        debugShowMaterialGrid: false,
+        title: 'iFix',
+        theme: appThemeData,
+        home: HomePage(), // Page inicial
+      )));
 }

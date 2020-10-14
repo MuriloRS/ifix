@@ -49,8 +49,8 @@ android {
         applicationId "com.ifix.developer"
         minSdkVersion 16
         multiDexEnabled true
-        targetSdkVersion 28
-        compileSdkVersion 28    
+        targetSdkVersion 29
+        compileSdkVersion 29    
         versionCode 7
         versionName '0.0.7'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
