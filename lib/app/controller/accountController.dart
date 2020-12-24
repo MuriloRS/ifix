@@ -43,7 +43,6 @@ class AccountController extends GetxController {
   }
 
   Future<void> deleteAccountData() async {
-    //repository.userSignin(email: model.user.email, password: '1364738p');
     repository.getAllFromCollection(collection: 'historic').then((historics) {
       Future.forEach(historics.documents, (doc) {
         doc.reference.delete();

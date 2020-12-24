@@ -45,8 +45,14 @@ class FirebaseProvider {
 
   setDataCollection(
       {@required String collection,
-      @required Map<String, dynamic> data}) async {
-    await Firestore.instance.collection(collection).add(data);
+      @required Map<String, dynamic> data,
+      String id}) async {
+    id == null
+        ? await Firestore.instance.collection(collection).add(data)
+        : await Firestore.instance
+            .collection(collection)
+            .document(id)
+            .setData(data);
   }
 
   updateDataCollection(

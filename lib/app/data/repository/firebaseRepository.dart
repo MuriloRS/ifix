@@ -40,9 +40,10 @@ class FirebaseRepository {
 
   setDataCollection(
       {@required String collection,
-      @required Map<String, dynamic> data}) async {
+      @required Map<String, dynamic> data,
+      String id}) async {
     await firebaseProvider.setDataCollection(
-        collection: collection, data: data);
+        collection: collection, data: data, id: id);
   }
 
   getAllFromCollection({@required String collection}) async {

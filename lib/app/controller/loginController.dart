@@ -75,11 +75,11 @@ class LoginController extends GetxController {
           'max_distance': 30,
           'notifications': false,
           'localization': null,
-          'configs': {'rating': 0.0, 'max_distance': 50, 'notifications': true}
+          'configs': {'rating': 0.0, 'max_distance': 30, 'notifications': true}
         };
 
         await repository.setDataCollection(
-            collection: 'users', data: userModel);
+            collection: 'users', data: userModel, id: result.user.uid);
 
         model.userData = userModel;
         model.user = result.user;

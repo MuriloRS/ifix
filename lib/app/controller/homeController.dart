@@ -17,7 +17,6 @@ import 'package:permission_handler/permission_handler.dart';
 
 class HomeController extends GetxController {
   UserModel model;
-  dynamic googleKey;
 
   HomeController(this.model);
 
@@ -32,18 +31,8 @@ class HomeController extends GetxController {
         rating: model.userData['configs']['rating']);
   }
 
-  _getKeyGoogle() async {
-    RemoteConfig remoteConfig = await RemoteConfig.instance;
-    await remoteConfig.fetch();
-    await remoteConfig.activateFetched();
-
-    googleKey = remoteConfig.getValue('api_google').asString();
-  }
-
   Future<Map<String, dynamic>> getMecanicsFromGoogle(context) async {
     try {
-      await _getKeyGoogle();
-
       List<Map<String, dynamic>> results = new List();
       Map<String, dynamic> result = new Map();
 
@@ -69,7 +58,7 @@ class HomeController extends GetxController {
           await getMecanicsDatabase(context);
 
       if (mecanicsFromFile.length == 0) {
-        var googlePlace = GooglePlace(googleKey);
+        var googlePlace = GooglePlace(model.googleKey);
 
         NearBySearchResponse response = await googlePlace.search
             .getNearBySearch(
@@ -119,7 +108,7 @@ class HomeController extends GetxController {
               "Desculpe, ocorreu um erro ao buscar as oficinas, nosso time estará corrigindo o problema o mais breve possível.",
           color: Colors.black);
 
-      _sendReport("ERRO AO BUSCAR AS OFICINAS");
+      _sendReport("ERRO AO BUSCAR AS OFICINAS: " + e.toString());
 
       return null;
     }
